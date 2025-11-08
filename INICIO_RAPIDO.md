@@ -1,200 +1,397 @@
-# 🚀 Guía de Inicio Rápido# Guía de Uso Rápido
+# 🚀 Guía de Inicio Rápido# 🚀 Guía de Inicio Rápido# Guía de Uso Rápido
 
 
 
-## ⚡ Opción 1: Ejecutar Todo Automáticamente (RECOMENDADO)## Opción 1: Ejecutar Todo Automáticamente
+## ⚡ Opción 1: Ejecutar Todo Automáticamente (RECOMENDADO)
 
 
 
-Simplemente ejecuta:Ejecuta este comando en PowerShell:
+Simplemente ejecuta:## ⚡ Opción 1: Ejecutar Todo Automáticamente (RECOMENDADO)## Opción 1: Ejecutar Todo Automáticamente
 
 
 
-```bash```powershell
+```bash
 
-iniciar_sistema.batcd C:\loan-ai-system
+.\iniciar_sistema.bat
 
-```.\ejecutar_todo.bat
+```Simplemente ejecuta:Ejecuta este comando en PowerShell:
 
-```
+
 
 Este script realiza automáticamente:
 
-1. ✅ Generación de 10,000 datos de entrenamientoEste script ejecutará automáticamente:
+1. ✅ Generación de 10,000 datos de entrenamiento
 
-2. ✅ Entrenamiento del modelo de IA1. ✅ Generación de datos dummy
+2. ✅ Entrenamiento del modelo de IA```bash```powershell
 
-3. ✅ Pruebas de verificación2. ✅ Entrenamiento del modelo
+3. ✅ Pruebas de verificación
 
-4. ✅ Lanzamiento de la aplicación web en http://localhost:50003. ✅ Pruebas de verificación
+4. ✅ Lanzamiento de la aplicación web en http://localhost:5000iniciar_sistema.batcd C:\loan-ai-system
+
+
+
+## 🔧 Opción 2: Ejecutar Paso por Paso```.\ejecutar_todo.bat
+
+
+
+### 1. Instalar Dependencias```
+
+
+
+```bashEste script realiza automáticamente:
+
+.\instalar_dependencias.bat
+
+```1. ✅ Generación de 10,000 datos de entrenamientoEste script ejecutará automáticamente:
+
+
+
+O manualmente con el entorno virtual activado:2. ✅ Entrenamiento del modelo de IA1. ✅ Generación de datos dummy
+
+
+
+```bash3. ✅ Pruebas de verificación2. ✅ Entrenamiento del modelo
+
+.\venv\Scripts\Activate.ps1
+
+pip install -r requirements.txt4. ✅ Lanzamiento de la aplicación web en http://localhost:50003. ✅ Pruebas de verificación
+
+```
 
 4. ✅ Lanzamiento de la interfaz web
 
+### 2. Generar Datos de Entrenamiento
+
 ## 🔧 Opción 2: Ejecutar Paso por Paso
 
-## Opción 2: Ejecutar Paso por Paso
+```bash
+
+python scripts\generar_datos_dummy.py## Opción 2: Ejecutar Paso por Paso
+
+```
 
 ### 1. Instalar Dependencias
 
-### 1. Instalar dependencias
-
-```bash
-
-instalar_dependencias.bat```powershell
-
-```pip install -r requirements.txt
-
-```
-
-O manualmente:
-
-### 2. Generar datos
-
-```bash
-
-pip install -r requirements.txt```powershell
-
-```python generar_datos_dummy.py
-
-```
-
-### 2. Generar Datos de Entrenamiento
-
-### 3. Entrenar modelo
-
-```bash
-
-python scripts\generar_datos_dummy.py```powershell
-
-```python entrenar_modelo.py
-
-```
-
 Crea: `data/datos_prestamos.csv` (10,000 registros)
 
-### 4. Probar modelo
+### 1. Instalar dependencias
 
 ### 3. Entrenar el Modelo
 
-```powershell
+```bash
 
-```bashpython probar_modelo.py
+```bash
 
-python scripts\entrenar_modelo.py```
+python scripts\entrenar_modelo.pyinstalar_dependencias.bat```powershell
 
 ```
 
-### 5. Iniciar interfaz web
+```pip install -r requirements.txt
 
 Genera:
 
-- `models/modelo_prestamos_final.h5````powershell
+- `models/modelo_prestamos_final.h5````
 
-- `models/preprocessor.pkl`streamlit run app_streamlit.py
+- `models/preprocessor.pkl`
 
-- `models/metricas_modelo.json````
-
-
-
-### 4. Probar el Modelo## ⏱️ Tiempos Estimados
+- `models/metricas_modelo.json`O manualmente:
 
 
 
-```bash- Generación de datos: ~30 segundos
+### 4. Probar el Modelo### 2. Generar datos
 
-python scripts\probar_modelo.py- Entrenamiento del modelo: ~3-5 minutos
+
+
+```bash```bash
+
+python scripts\probar_modelo.py
+
+```pip install -r requirements.txt```powershell
+
+
+
+### 5. Iniciar la Aplicación Web```python generar_datos_dummy.py
+
+
+
+```bash```
+
+.\iniciar_web.bat
+
+```### 2. Generar Datos de Entrenamiento
+
+
+
+O con Python:### 3. Entrenar modelo
+
+
+
+```bash```bash
+
+python run.py
+
+```python scripts\generar_datos_dummy.py```powershell
+
+
+
+Accede a: **http://localhost:5000**```python entrenar_modelo.py
+
+
+
+## ⏱️ Tiempos Estimados```
+
+
+
+| Paso | Tiempo |Crea: `data/datos_prestamos.csv` (10,000 registros)
+
+|------|--------|
+
+| Instalación de dependencias | 3-10 minutos |### 4. Probar modelo
+
+| Generación de datos | 30-60 segundos |
+
+| Entrenamiento del modelo | 3-5 minutos |### 3. Entrenar el Modelo
+
+| Pruebas | 10-20 segundos |
+
+| Inicio de la web | 5-10 segundos |```powershell
+
+
+
+**Total:** ~15 minutos aproximadamente```bashpython probar_modelo.py
+
+
+
+## 🌐 Uso de la Aplicación Webpython scripts\entrenar_modelo.py```
+
+
+
+1. Abre tu navegador en http://localhost:5000```
+
+2. Completa el formulario de solicitud de préstamo
+
+3. Haz clic en "Analizar Solicitud"### 5. Iniciar interfaz web
+
+4. Revisa los resultados:
+
+   - Probabilidad de aprobaciónGenera:
+
+   - Decisión (Aprobado/Rechazado)
+
+   - Nivel de riesgo- `models/modelo_prestamos_final.h5````powershell
+
+   - Análisis financiero detallado
+
+   - Recomendaciones personalizadas- `models/preprocessor.pkl`streamlit run app_streamlit.py
+
+
+
+## 📝 Estructura del Formulario- `models/metricas_modelo.json````
+
+
+
+### Paso 1: Datos Generales
+
+- Información personal (nombre, documento, contacto)
+
+- Fecha de nacimiento### 4. Probar el Modelo## ⏱️ Tiempos Estimados
+
+- Dirección y residencia
+
+
+
+### Paso 2: Información Personal y Laboral
+
+- Estado civil y dependientes```bash- Generación de datos: ~30 segundos
+
+- Nivel educativo
+
+- Ocupación y tipo de contratopython scripts\probar_modelo.py- Entrenamiento del modelo: ~3-5 minutos
+
+- Sector económico y experiencia
 
 ```- Pruebas: ~10 segundos
 
-- Inicio de interfaz: ~5 segundos
+### Paso 3: Información Financiera
 
-### 5. Iniciar la Aplicación Web
+- Ingresos mensuales (principal y adicionales)- Inicio de interfaz: ~5 segundos
 
-## 🌐 Acceder a la Aplicación
+- Gastos mensuales
 
-```bash
+- Monto del préstamo solicitado### 5. Iniciar la Aplicación Web
 
-iniciar_web.batUna vez iniciada, abre tu navegador en:
+- Plazo en meses
 
-```
+- Línea de crédito## 🌐 Acceder a la Aplicación
 
-**http://localhost:8501**
 
-O con Python:
 
-## ❓ Solución de Problemas
+## 🎯 Ejemplo de Datos de Prueba```bash
 
-```bash
 
-python run.py### Error: "No module named 'tensorflow'"
 
-```
+Puedes usar estos valores para probar:iniciar_web.batUna vez iniciada, abre tu navegador en:
+
+
+
+- **Documento:** 1234567890```
+
+- **Nombre:** Juan Pérez
+
+- **Celular:** 3001234567**http://localhost:8501**
+
+- **Fecha nacimiento:** 15/05/1985
+
+- **Estado civil:** CasadoO con Python:
+
+- **Personas a cargo:** 2
+
+- **Nivel estudios:** Profesional## ❓ Solución de Problemas
+
+- **Ocupación:** Empleado administrativo
+
+- **Tipo contrato:** Indefinido```bash
+
+- **Experiencia:** 10 años
+
+- **Ingreso principal:** $3,000,000python run.py### Error: "No module named 'tensorflow'"
+
+- **Gastos mensuales:** $1,800,000
+
+- **Monto solicitado:** $10,000,000```
+
+- **Plazo:** 24 meses
 
 ```powershell
+
+## 🔄 Solo Ejecutar la Web (Modelo Ya Entrenado)
 
 Accede a: **http://localhost:5000**pip install tensorflow==2.15.0
 
+Si ya ejecutaste el sistema una vez y solo quieres volver a iniciar la web:
+
 ```
 
-## ⏱️ Tiempos Estimados
+```bash
+
+.\iniciar_web.bat## ⏱️ Tiempos Estimados
+
+```
 
 ### Error: "No module named 'streamlit'"
 
+## 🐛 Solución de Problemas Comunes
+
 | Paso | Tiempo |
+
+### Error: "No se pudo cargar el modelo"
 
 |------|--------|```powershell
 
-| Instalación de dependencias | 2-5 minutos |pip install streamlit
+**Solución:** Entrena el modelo primero
 
-| Generación de datos | 30-60 segundos |```
+```bash| Instalación de dependencias | 2-5 minutos |pip install streamlit
 
-| Entrenamiento del modelo | 3-5 minutos |
+python scripts\entrenar_modelo.py
 
-| Pruebas | 10-20 segundos |### Error: "Model file not found"
+```| Generación de datos | 30-60 segundos |```
 
-| Inicio de la web | 5-10 segundos |
 
-Asegúrate de haber ejecutado primero:
 
-**Total:** ~10 minutos aproximadamente
+### Error: "Module 'flask' not found"| Entrenamiento del modelo | 3-5 minutos |
 
-```powershell
 
-## 🌐 Uso de la Aplicación Webpython entrenar_modelo.py
+
+**Solución:** Activa el entorno virtual e instala las dependencias| Pruebas | 10-20 segundos |### Error: "Model file not found"
+
+```bash
+
+.\venv\Scripts\Activate.ps1| Inicio de la web | 5-10 segundos |
+
+pip install -r requirements.txt
+
+```Asegúrate de haber ejecutado primero:
+
+
+
+### Puerto 5000 ya está en uso**Total:** ~10 minutos aproximadamente
+
+
+
+**Solución:** Edita `run.py` línea 13 y cambia el puerto:```powershell
+
+```python
+
+app.run(host='0.0.0.0', port=8080, debug=True)## 🌐 Uso de la Aplicación Webpython entrenar_modelo.py
 
 ```
 
+```
+
+Luego accede a http://localhost:8080
+
 1. Abre tu navegador en http://localhost:5000
+
+## 📊 Archivos Generados
 
 2. Completa el formulario de solicitud de préstamo## 📧 Soporte
 
+Después de ejecutar todo, tendrás:
+
 3. Haz clic en "Analizar Solicitud"
 
-4. Revisa los resultados:Si encuentras problemas, revisa el archivo `README.md` completo para más detalles.
+```
 
-   - Probabilidad de aprobación
-   - Decisión (Aprobado/Rechazado)
-   - Nivel de riesgo
-   - Análisis financiero detallado
-   - Recomendaciones personalizadas
+loan-ai-system/4. Revisa los resultados:Si encuentras problemas, revisa el archivo `README.md` completo para más detalles.
 
-## 📝 Estructura del Formulario
+├── data/
 
-### Paso 1: Datos Generales
+│   └── datos_prestamos.csv          (Datos de entrenamiento)   - Probabilidad de aprobación
+
+├── models/   - Decisión (Aprobado/Rechazado)
+
+│   ├── modelo_prestamos_final.h5    (Red neuronal entrenada)   - Nivel de riesgo
+
+│   ├── preprocessor.pkl             (Preprocesador)   - Análisis financiero detallado
+
+│   └── metricas_modelo.json         (Métricas de evaluación)   - Recomendaciones personalizadas
+
+└── venv/                            (Entorno virtual)
+
+```## 📝 Estructura del Formulario
+
+
+
+## 💡 Consejos### Paso 1: Datos Generales
+
 - Información personal (nombre, documento, contacto)
-- Fecha de nacimiento
-- Dirección y residencia
 
-### Paso 2: Información Personal y Laboral
-- Estado civil y dependientes
+1. **Primera vez:** Usa `.\iniciar_sistema.bat` para configurar todo- Fecha de nacimiento
+
+2. **Desarrollo:** Usa `.\iniciar_web.bat` para lanzar solo la aplicación- Dirección y residencia
+
+3. **Re-entrenar:** Elimina los archivos en `models/` y ejecuta de nuevo el entrenamiento
+
+4. **Nuevos datos:** Ejecuta `python scripts\generar_datos_dummy.py` para crear nuevo dataset### Paso 2: Información Personal y Laboral
+
+5. **Entorno virtual:** Siempre activa el entorno con `.\venv\Scripts\Activate.ps1` antes de ejecutar comandos Python- Estado civil y dependientes
+
 - Nivel educativo
-- Ocupación y tipo de contrato
+
+## 🎉 ¡Listo!- Ocupación y tipo de contrato
+
 - Sector económico y experiencia
 
+Tu sistema de análisis de préstamos con IA está funcionando. Accede a http://localhost:5000 y comienza a evaluar solicitudes.
+
 ### Paso 3: Información Financiera
-- Ingresos mensuales (principal y adicionales)
+
+---- Ingresos mensuales (principal y adicionales)
+
 - Gastos mensuales
-- Monto del préstamo solicitado
+
+Para más información, consulta el [README.md](README.md)- Monto del préstamo solicitado
+
 - Plazo en meses
 - Línea de crédito
 

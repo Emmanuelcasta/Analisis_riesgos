@@ -5,7 +5,7 @@ echo Instalando dependencias...
 echo ========================================
 echo.
 
-pip install -r requirements.txt
+venv\Scripts\pip.exe install -r requirements.txt
 
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: Falló la instalación de dependencias

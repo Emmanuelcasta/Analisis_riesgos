@@ -7,7 +7,7 @@ echo.
 
 echo [1/4] Generando datos de entrenamiento...
 echo ========================================
-python scripts\generar_datos_dummy.py
+venv\Scripts\python.exe scripts\generar_datos_dummy.py
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: Falló la generación de datos
     pause
@@ -18,7 +18,7 @@ echo.
 
 echo [2/4] Entrenando modelo de IA...
 echo ========================================
-python scripts\entrenar_modelo.py
+venv\Scripts\python.exe scripts\entrenar_modelo.py
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: Falló el entrenamiento del modelo
     pause
@@ -29,7 +29,7 @@ echo.
 
 echo [3/4] Probando modelo...
 echo ========================================
-python scripts\probar_modelo.py
+venv\Scripts\python.exe scripts\probar_modelo.py
 if %ERRORLEVEL% NEQ 0 (
     echo ERROR: Falló la prueba del modelo
     pause
@@ -43,6 +43,6 @@ echo ========================================
 echo La aplicación estará disponible en: http://localhost:5000
 echo Presiona Ctrl+C para detener el servidor
 echo.
-python run.py
+venv\Scripts\python.exe run.py
 
 pause

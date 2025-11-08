@@ -13,6 +13,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
 import matplotlib.pyplot as plt
 
 # Configurar semilla para reproducibilidad

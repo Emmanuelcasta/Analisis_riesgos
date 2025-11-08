@@ -79,10 +79,10 @@ def generar_datos(n_samples=10000):
         ciudad_residencia = random.choice(CIUDADES_COLOMBIA)
         direccion_residencia = fake.address().replace('\n', ', ')
         es_arrendador = random.choice([True, False])
-        años_domicilio = np.random.randint(0, 30)
+        años_domicilio = np.random.randint(0, 31)  # 0 a 30 años
         
-        # Nacimiento
-        edad = np.random.randint(18, 75)
+        # Nacimiento - Usar rango más amplio para evitar problemas
+        edad = np.random.randint(20, 70)  # Rango más seguro
         fecha_nacimiento = generar_fecha_nacimiento(edad)
         pais_nacimiento = 'Colombia' if random.random() > 0.1 else fake.country()
         departamento_nacimiento = random.choice(DEPARTAMENTOS)
@@ -104,7 +104,7 @@ def generar_datos(n_samples=10000):
         
         # Paso 2: Conocimiento
         estado_civil = random.choice(ESTADOS_CIVIL)
-        personas_a_cargo = np.random.randint(0, 6)
+        personas_a_cargo = np.random.randint(0, 7)  # 0 a 6 personas
         genero = random.choice(GENEROS)
         ocupacion = random.choice(OCUPACIONES)
         cargo_empleado = fake.job() if ocupacion == 'Empleado administrativo' else ''
@@ -123,7 +123,9 @@ def generar_datos(n_samples=10000):
             actividad_independiente = ''
             sector_economico = random.choice(SECTORES_ECONOMICOS)
         
-        tiempo_desarrollo_actividad = np.random.randint(1, min(edad - 17, 30))
+        # Tiempo de desarrollo de actividad (asegurar valores válidos)
+        max_tiempo_desarrollo = max(min(edad - 17, 30), 1)
+        tiempo_desarrollo_actividad = np.random.randint(1, max_tiempo_desarrollo + 1)
         tiempo_en_actividad = np.random.randint(1, tiempo_desarrollo_actividad + 1)
         nivel_estudios = random.choice(NIVELES_ESTUDIO)
         titulo_profesional = fake.job() if nivel_estudios in ['Profesional', 'Posgrado'] else ''
@@ -283,20 +285,38 @@ def generar_datos(n_samples=10000):
 
 if __name__ == '__main__':
     import os
-    print("Generando datos dummy para entrenamiento...")
-    df = generar_datos(10000)
+    import sys
     
-    # Crear carpeta data si no existe
-    data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
-    os.makedirs(data_dir, exist_ok=True)
-    
-    # Guardar datos
-    csv_path = os.path.join(data_dir, 'datos_prestamos.csv')
-    df.to_csv(csv_path, index=False)
-    print(f"\n✅ Generados {len(df)} registros")
-    print(f"   - Aprobados: {df['aprobado'].sum()} ({df['aprobado'].mean()*100:.1f}%)")
-    print(f"   - Rechazados: {(1-df['aprobado']).sum()} ({(1-df['aprobado'].mean())*100:.1f}%)")
-    print(f"\nArchivo guardado: {csv_path}")
+    try:
+        print("="*60)
+        print("Generando datos dummy para entrenamiento...")
+        print("="*60)
+        
+        # Generar datos
+        print("\n⏳ Generando 10,000 registros...")
+        df = generar_datos(10000)
+        
+        # Crear carpeta data si no existe
+        data_dir = os.path.join(os.path.dirname(__file__), '..', 'data')
+        os.makedirs(data_dir, exist_ok=True)
+        print(f"✓ Carpeta de datos verificada: {os.path.abspath(data_dir)}")
+        
+        # Guardar datos
+        csv_path = os.path.join(data_dir, 'datos_prestamos.csv')
+        df.to_csv(csv_path, index=False, encoding='utf-8')
+        
+        print(f"\n✅ Generación completada exitosamente!")
+        print(f"   Total de registros: {len(df)}")
+        print(f"   - Aprobados: {df['aprobado'].sum()} ({df['aprobado'].mean()*100:.1f}%)")
+        print(f"   - Rechazados: {(1-df['aprobado']).sum()} ({(1-df['aprobado'].mean())*100:.1f}%)")
+        print(f"\n📁 Archivo guardado: {os.path.abspath(csv_path)}")
+        
+    except Exception as e:
+        print(f"\n❌ ERROR durante la generación de datos:")
+        print(f"   {str(e)}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
     
     # Mostrar estadísticas
     print("\n📊 Estadísticas del dataset:")
