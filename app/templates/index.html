@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitud de Préstamo - Sistema IA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-primary"><i class="bi bi-cash-coin"></i> Solicitud de Préstamo</h1>
+        <p class="lead">Complete el formulario para recibir un análisis inteligente de su solicitud</p>
+    </div>
+
+    {% if metricas %}
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> 
+        Sistema entrenado con <strong>{{ metricas.samples_entrenamiento }}</strong> casos | 
+        Precisión del modelo: <strong>{{ "%.1f"|format(metricas.accuracy * 100) }}%</strong>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/analizar" id="loanForm">
+        <!-- Paso 1: Datos Generales -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="bi bi-person-badge"></i> Paso 1: Datos Generales</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Tipo de documento</label>
+                        <select name="tipo_documento" class="form-select" required>
+                            <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
+                            <option value="Cédula de Extranjería">Cédula de Extranjería</option>
+                            <option value="Pasaporte">Pasaporte</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Número de documento</label>
+                        <input type="text" name="documento_identidad" class="form-control" required 
+                               pattern="[0-9]+" placeholder="1234567890">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Celular</label>
+                        <input type="tel" name="celular" class="form-control" required 
+                               pattern="[0-9]{10}" placeholder="3001234567">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Primer nombre</label>
+                        <input type="text" name="primer_nombre" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Segundo nombre</label>
+                        <input type="text" name="segundo_nombre" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Primer apellido</label>
+                        <input type="text" name="primer_apellido" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Segundo apellido</label>
+                        <input type="text" name="segundo_apellido" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Correo electrónico</label>
+                        <input type="email" name="correo_electronico" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha de nacimiento</label>
+                        <input type="date" name="fecha_nacimiento" class="form-control" required 
+                               min="1940-01-01" max="2006-12-31">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Años en domicilio actual</label>
+                        <input type="number" name="años_domicilio" class="form-control" required 
+                               min="0" max="50" value="5">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 2: Residencia -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="bi bi-house-door"></i> Información de Residencia</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Departamento</label>
+                        <select name="departamento_residencia" class="form-select" required>
+                            <option value="Cundinamarca">Cundinamarca</option>
+                            <option value="Antioquia">Antioquia</option>
+                            <option value="Valle del Cauca">Valle del Cauca</option>
+                            <option value="Atlántico">Atlántico</option>
+                            <option value="Santander">Santander</option>
+                            <option value="Bolívar">Bolívar</option>
+                            <option value="Boyacá">Boyacá</option>
+                            <option value="Caldas">Caldas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Ciudad</label>
+                        <select name="ciudad_residencia" class="form-select" required>
+                            <option value="Bogotá">Bogotá</option>
+                            <option value="Medellín">Medellín</option>
+                            <option value="Cali">Cali</option>
+                            <option value="Barranquilla">Barranquilla</option>
+                            <option value="Cartagena">Cartagena</option>
+                            <option value="Bucaramanga">Bucaramanga</option>
+                            <option value="Pereira">Pereira</option>
+                            <option value="Manizales">Manizales</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" name="direccion_residencia" class="form-control" required>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-check">
+                            <input type="checkbox" name="es_arrendador" class="form-check-input" id="propietario">
+                            <label class="form-check-label" for="propietario">
+                                Soy propietario de la vivienda
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 3: Información Personal -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="bi bi-person"></i> Paso 2: Información Personal y Laboral</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Estado civil</label>
+                        <select name="estado_civil" class="form-select" required>
+                            <option value="Soltero">Soltero</option>
+                            <option value="Casado">Casado</option>
+                            <option value="Unión Libre">Unión Libre</option>
+                            <option value="Divorciado">Divorciado</option>
+                            <option value="Viudo">Viudo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Género</label>
+                        <select name="genero" class="form-select" required>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Personas a cargo</label>
+                        <input type="number" name="personas_a_cargo" class="form-control" required 
+                               min="0" max="10" value="0">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nivel de estudios</label>
+                        <select name="nivel_estudios" class="form-select" required>
+                            <option value="Primaria">Primaria</option>
+                            <option value="Bachillerato">Bachillerato</option>
+                            <option value="Técnico">Técnico</option>
+                            <option value="Tecnólogo">Tecnólogo</option>
+                            <option value="Profesional">Profesional</option>
+                            <option value="Posgrado">Posgrado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Título profesional (si aplica)</label>
+                        <input type="text" name="titulo_profesional" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 4: Información Laboral -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="bi bi-briefcase"></i> Información Laboral</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Ocupación</label>
+                        <select name="ocupacion" class="form-select" required>
+                            <option value="Empleado administrativo">Empleado administrativo</option>
+                            <option value="Comerciante">Comerciante</option>
+                            <option value="Profesional independiente">Profesional independiente</option>
+                            <option value="Agricultor">Agricultor</option>
+                            <option value="Conductor">Conductor</option>
+                            <option value="Técnico">Técnico</option>
+                            <option value="Operario">Operario</option>
+                            <option value="Vendedor">Vendedor</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Cargo del empleado</label>
+                        <input type="text" name="cargo_empleado" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Tipo de contrato</label>
+                        <select name="tipo_contrato" class="form-select" required>
+                            <option value="Indefinido">Indefinido</option>
+                            <option value="Fijo">Fijo</option>
+                            <option value="Obra o Labor">Obra o Labor</option>
+                            <option value="Prestación de Servicios">Prestación de Servicios</option>
+                            <option value="Independiente">Independiente</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Sector económico</label>
+                        <select name="sector_economico" class="form-select" required>
+                            <option value="Servicios profesionales">Servicios profesionales</option>
+                            <option value="Comercio al por menor">Comercio al por menor</option>
+                            <option value="Comercio al por mayor">Comercio al por mayor</option>
+                            <option value="Tecnología">Tecnología</option>
+                            <option value="Salud">Salud</option>
+                            <option value="Educación">Educación</option>
+                            <option value="Construcción">Construcción</option>
+                            <option value="Manufactura">Manufactura</option>
+                            <option value="Agricultura y ganadería">Agricultura y ganadería</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Actividad económica (si es independiente)</label>
+                        <input type="text" name="actividad_economica_independiente" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Años de experiencia en la actividad</label>
+                        <input type="number" name="tiempo_desarrollo_actividad" class="form-control" required 
+                               min="0" max="50" value="5">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Años en la actividad actual</label>
+                        <input type="number" name="tiempo_en_actividad" class="form-control" required 
+                               min="0" max="50" value="3">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 5: Información Financiera -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h4><i class="bi bi-currency-dollar"></i> Paso 3: Información Financiera</h4>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Fuente principal de ingresos</label>
+                        <select name="fuente_ingresos_principal" class="form-select" required>
+                            <option value="Salario">Salario</option>
+                            <option value="Negocio propio">Negocio propio</option>
+                            <option value="Honorarios">Honorarios</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Ingreso principal mensual ($COP)</label>
+                        <input type="number" name="ingreso_principal" class="form-control" required 
+                               min="0" step="10000" value="3000000">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Otros ingresos mensuales ($COP)</label>
+                        <input type="number" name="otros_ingresos" class="form-control" 
+                               min="0" step="10000" value="0">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Gastos mensuales ($COP)</label>
+                        <input type="number" name="gastos_mensuales" class="form-control" required 
+                               min="0" step="10000" value="1800000">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Monto del préstamo solicitado ($COP)</label>
+                        <input type="number" name="monto_solicitado" class="form-control" required 
+                               min="500000" step="100000" value="10000000">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Plazo (meses)</label>
+                        <select name="plazo_meses" class="form-select" required>
+                            <option value="6">6 meses</option>
+                            <option value="12" selected>12 meses</option>
+                            <option value="18">18 meses</option>
+                            <option value="24">24 meses</option>
+                            <option value="36">36 meses</option>
+                            <option value="48">48 meses</option>
+                            <option value="60">60 meses</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Línea de crédito</label>
+                        <select name="linea_credito" class="form-select" required>
+                            <option value="Consumo">Consumo</option>
+                            <option value="Libre Inversión">Libre Inversión</option>
+                            <option value="Microcrédito">Microcrédito</option>
+                            <option value="Vehículo">Vehículo</option>
+                            <option value="Vivienda">Vivienda</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de envío -->
+        <div class="text-center mb-5">
+            <button type="submit" class="btn btn-primary btn-lg px-5">
+                <i class="bi bi-search"></i> Analizar Solicitud
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Validación adicional del formulario
+    document.getElementById('loanForm').addEventListener('submit', function(e) {
+        const ingresoPrincipal = parseFloat(document.querySelector('[name="ingreso_principal"]').value);
+        const gastosMensuales = parseFloat(document.querySelector('[name="gastos_mensuales"]').value);
+        
+        if (gastosMensuales > ingresoPrincipal) {
+            alert('Los gastos mensuales no pueden ser mayores que los ingresos principales');
+            e.preventDefault();
+        }
+    });
+</script>
+{% endblock %}

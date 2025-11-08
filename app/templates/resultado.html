@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block title %}Resultado del Análisis - Sistema IA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center mb-4">
+        <h1 class="display-5"><i class="bi bi-clipboard-check"></i> Resultado del Análisis</h1>
+    </div>
+
+    <!-- Resultado principal -->
+    <div class="row mb-4">
+        <div class="col-md-6 mx-auto">
+            {% if aprobado %}
+            <div class="alert alert-success text-center py-4">
+                <h2><i class="bi bi-check-circle-fill"></i> SOLICITUD APROBADA</h2>
+                <p class="lead mb-0">Probabilidad de aprobación: <strong>{{ "%.1f"|format(probabilidad * 100) }}%</strong></p>
+            </div>
+            {% else %}
+            <div class="alert alert-danger text-center py-4">
+                <h2><i class="bi bi-x-circle-fill"></i> SOLICITUD RECHAZADA</h2>
+                <p class="lead mb-0">Probabilidad de aprobación: <strong>{{ "%.1f"|format(probabilidad * 100) }}%</strong></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Gráfico de probabilidad -->
+    <div class="row mb-4">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4">Probabilidad de Aprobación</h5>
+                    <div class="progress" style="height: 40px;">
+                        <div class="progress-bar bg-{{ color_riesgo }}" role="progressbar" 
+                             style="width: {{ probabilidad * 100 }}%;" 
+                             aria-valuenow="{{ probabilidad * 100 }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ "%.1f"|format(probabilidad * 100) }}%
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <span class="badge bg-{{ color_riesgo }} fs-5">Nivel de Riesgo: {{ nivel_riesgo }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datos del solicitante -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="bi bi-person-badge"></i> Datos del Solicitante</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Nombre:</strong><br>
+                            {{ datos_solicitante.nombre }}
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Edad:</strong><br>
+                            {{ datos_solicitante.edad }} años
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Monto solicitado:</strong><br>
+                            ${{ "{:,.0f}".format(datos_solicitante.monto_solicitado) }}
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Plazo:</strong><br>
+                            {{ datos_solicitante.plazo_meses }} meses
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Análisis financiero -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5><i class="bi bi-graph-up"></i> Análisis Financiero Detallado</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <div class="text-muted">Ingresos Totales</div>
+                                <div class="h4 text-success">${{ "{:,.0f}".format(total_ingresos) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <div class="text-muted">Capacidad de Pago</div>
+                                <div class="h4 {% if capacidad_pago > 0 %}text-success{% else %}text-danger{% endif %}">
+                                    ${{ "{:,.0f}".format(capacidad_pago) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <div class="text-muted">Cuota Estimada</div>
+                                <div class="h4 text-primary">${{ "{:,.0f}".format(cuota_estimada) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <div class="text-muted">Ratio Endeudamiento</div>
+                                <div class="h4 {% if ratio_endeudamiento <= 0.4 %}text-success{% else %}text-warning{% endif %}">
+                                    {{ "%.1f"|format(ratio_endeudamiento * 100) }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de barras -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5><i class="bi bi-bar-chart"></i> Distribución Financiera</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="financialChart" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recomendaciones -->
+    {% if recomendaciones %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning">
+                    <h5><i class="bi bi-lightbulb"></i> Recomendaciones</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        {% for recomendacion in recomendaciones %}
+                        <li>{{ recomendacion }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Botones de acción -->
+    <div class="text-center mb-5">
+        <a href="/" class="btn btn-primary btn-lg">
+            <i class="bi bi-arrow-left"></i> Nueva Solicitud
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Gráfico de barras con Chart.js
+    const ctx = document.getElementById('financialChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Ingresos Totales', 'Gastos Mensuales', 'Cuota Préstamo', 'Capacidad de Pago'],
+            datasets: [{
+                label: 'Monto ($COP)',
+                data: [
+                    {{ total_ingresos }},
+                    {{ total_ingresos - capacidad_pago }},
+                    {{ cuota_estimada }},
+                    {{ capacidad_pago }}
+                ],
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.7)',
+                    'rgba(220, 53, 69, 0.7)',
+                    'rgba(255, 193, 7, 0.7)',
+                    'rgba(0, 123, 255, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(0, 123, 255, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return '$' + context.parsed.y.toLocaleString('es-CO');
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString('es-CO');
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
