@@ -157,7 +157,27 @@ def generar_datos(n_samples=10000):
         # Calculamos variables derivadas para el scoring
         total_ingresos = ingreso_principal + otros_ingresos
         capacidad_pago = total_ingresos - gastos_mensuales
-        cuota_estimada = monto_solicitado * 0.025  # Estimación simplificada (2.5% del monto)
+        
+        # Cálculo realista de la cuota mensual usando fórmula de amortización
+        # Tasas de interés mensuales según línea de crédito (realistas para Colombia)
+        tasas_interes_mensual = {
+            'Consumo': 0.025,          # ~30% EA (2.5% mensual)
+            'Libre Inversión': 0.022,  # ~26% EA (2.2% mensual)
+            'Vehículo': 0.018,         # ~22% EA (1.8% mensual)
+            'Vivienda': 0.010,         # ~12% EA (1.0% mensual)
+            'Microcrédito': 0.030      # ~36% EA (3.0% mensual)
+        }
+        
+        tasa_mensual = tasas_interes_mensual.get(linea_credito, 0.022)
+        
+        # Fórmula de cuota: C = P * [i * (1 + i)^n] / [(1 + i)^n - 1]
+        # Donde: P = monto, i = tasa mensual, n = plazo en meses
+        if tasa_mensual > 0:
+            factor = (1 + tasa_mensual) ** plazo_meses
+            cuota_estimada = monto_solicitado * (tasa_mensual * factor) / (factor - 1)
+        else:
+            cuota_estimada = monto_solicitado / plazo_meses
+        
         ratio_gastos_ingresos = gastos_mensuales / total_ingresos if total_ingresos > 0 else 1
         ratio_endeudamiento = cuota_estimada / total_ingresos if total_ingresos > 0 else 1
         ratio_capacidad_cuota = capacidad_pago / cuota_estimada if cuota_estimada > 0 else 0
