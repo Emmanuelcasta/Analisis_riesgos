@@ -204,6 +204,10 @@ def entrenar_modelo():
     model = crear_modelo_deep_learning(X_train.shape[1])
     print(model.summary())
     
+    # Crear carpeta models si no existe
+    models_dir = os.path.join(os.path.dirname(__file__), '..', 'models')
+    os.makedirs(models_dir, exist_ok=True)
+    
     # 5. Configurar callbacks
     early_stopping = EarlyStopping(
         monitor='val_loss',
@@ -267,10 +271,6 @@ def entrenar_modelo():
     
     # 8. Guardar modelo y preprocesador
     print(f"\n💾 Guardando modelo y preprocesadores...")
-    
-    # Crear carpeta models si no existe
-    models_dir = os.path.join(os.path.dirname(__file__), '..', 'models')
-    os.makedirs(models_dir, exist_ok=True)
     
     # Guardar modelo de Keras
     model_path = os.path.join(models_dir, 'modelo_prestamos_final.h5')
