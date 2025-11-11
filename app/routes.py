@@ -122,19 +122,86 @@ def cargar_modelo():
     
     if modelo is None:
         try:
-            modelo_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'modelo_prestamos_final.h5')
-            preprocessor_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'preprocessor.pkl')
-            metricas_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'metricas_modelo.json')
+            base_path = os.path.join(os.path.dirname(__file__), '..', 'models')
             
-            modelo = keras.models.load_model(modelo_path)
-            with open(preprocessor_path, 'rb') as f:
-                preprocessor = pickle.load(f)
-            with open(metricas_path, 'r') as f:
-                metricas = json.load(f)
+            # Verificar si existe configuración de modelo comparativo
+            config_path = os.path.join(base_path, 'modelo_config.json')
+            if os.path.exists(config_path):
+                with open(config_path, 'r') as f:
+                    config = json.load(f)
+                
+                mejor_modelo = config.get('mejor_modelo', '')
+                print(f"📊 Cargando modelo: {mejor_modelo}")
+                
+                # Cargar modelo según configuración
+                if mejor_modelo == 'Random Forest':
+                    modelo_path = os.path.join(base_path, 'modelo_random_forest.pkl')
+                    with open(modelo_path, 'rb') as f:
+                        modelo = pickle.load(f)
+                    print(f"✅ Modelo Random Forest cargado (Accuracy: {config.get('accuracy', 'N/A')}%)")
+                elif mejor_modelo == 'Gradient Boosting':
+                    modelo_path = os.path.join(base_path, 'modelo_gradient_boosting.pkl')
+                    with open(modelo_path, 'rb') as f:
+                        modelo = pickle.load(f)
+                    print(f"✅ Modelo Gradient Boosting cargado (Accuracy: {config.get('accuracy', 'N/A')}%)")
+                elif mejor_modelo == 'Deep Learning':
+                    modelo_path = os.path.join(base_path, 'modelo_deep_learning.h5')
+                    modelo = keras.models.load_model(modelo_path)
+                    print(f"✅ Modelo Deep Learning cargado (Accuracy: {config.get('accuracy', 'N/A')}%)")
+                
+                # Cargar preprocessor comparativo
+                preprocessor_path = os.path.join(base_path, 'preprocessor_comparativa.pkl')
+                if os.path.exists(preprocessor_path):
+                    with open(preprocessor_path, 'rb') as f:
+                        preprocessor = pickle.load(f)
+                
+                # Cargar métricas comparativas y extraer las del mejor modelo
+                metricas_path = os.path.join(base_path, 'comparativa_modelos.json')
+                if os.path.exists(metricas_path):
+                    with open(metricas_path, 'r') as f:
+                        comparativa = json.load(f)
+                    
+                    # Extraer métricas del mejor modelo
+                    for modelo_info in comparativa.get('resumen_comparativo', []):
+                        if modelo_info['model_name'] == mejor_modelo:
+                            metricas = {
+                                'accuracy': modelo_info['accuracy'],
+                                'precision': modelo_info['precision'],
+                                'recall': modelo_info['recall'],
+                                'f1_score': modelo_info['f1_score'],
+                                'auc_roc': modelo_info['auc_roc'],
+                                'samples_entrenamiento': 8000,  # From train/test split
+                                'fecha_entrenamiento': config.get('fecha_entrenamiento', 'N/A'),
+                                'modelo': mejor_modelo
+                            }
+                            break
+                else:
+                    metricas = {
+                        'accuracy': 0.0,
+                        'precision': 0.0,
+                        'recall': 0.0,
+                        'f1_score': 0.0,
+                        'auc_roc': 0.0,
+                        'samples_entrenamiento': 0,
+                        'fecha_entrenamiento': 'N/A',
+                        'modelo': 'Unknown'
+                    }
+            else:
+                # Fallback al modelo original si no existe comparativa
+                modelo_path = os.path.join(base_path, 'modelo_prestamos_final.h5')
+                preprocessor_path = os.path.join(base_path, 'preprocessor.pkl')
+                metricas_path = os.path.join(base_path, 'metricas_modelo.json')
+                
+                modelo = keras.models.load_model(modelo_path)
+                with open(preprocessor_path, 'rb') as f:
+                    preprocessor = pickle.load(f)
+                with open(metricas_path, 'r') as f:
+                    metricas = json.load(f)
+                print("✅ Modelo original Deep Learning cargado (fallback)")
             
             return True
         except Exception as e:
-            print(f"Error al cargar el modelo: {e}")
+            print(f"❌ Error al cargar el modelo: {e}")
             return False
     return True
 
@@ -238,7 +305,14 @@ def analizar():
         # Crear DataFrame y realizar predicción
         df_entrada = pd.DataFrame([datos_entrada])
         X_entrada = preprocessor.transform(df_entrada)
-        probabilidad = float(modelo.predict(X_entrada, verbose=0)[0][0])
+        
+        # Determinar tipo de modelo y hacer predicción apropiada
+        if hasattr(modelo, 'predict_proba'):
+            # Modelos sklearn (Random Forest, Gradient Boosting)
+            probabilidad = float(modelo.predict_proba(X_entrada)[0][1])
+        else:
+            # Modelo Keras (Deep Learning)
+            probabilidad = float(modelo.predict(X_entrada, verbose=0)[0][0])
         
         # Determinar nivel de riesgo
         if probabilidad >= 0.75:
