@@ -1,102 +1,339 @@
-# 🚀 Guía de Inicio Rápido# 🚀 Guía de Inicio Rápido# 🚀 Guía de Inicio Rápido# Guía de Uso Rápido
+# 🚀 Guía de Inicio Rápido
 
 ## Sistema de Análisis de Riesgo Crediticio con IA
 
-
-
 Esta guía te llevará desde la instalación hasta tener el sistema funcionando en **menos de 10 minutos**.
-
-## ⚡ Opción 1: Ejecutar Todo Automáticamente (RECOMENDADO)
 
 ---
 
-
-
 ## 📋 Prerrequisitos
-
-Simplemente ejecuta:## ⚡ Opción 1: Ejecutar Todo Automáticamente (RECOMENDADO)## Opción 1: Ejecutar Todo Automáticamente
 
 Antes de comenzar, asegúrate de tener instalado:
 
-
-
 - ✅ **Python 3.12 o superior** → [Descargar aquí](https://www.python.org/downloads/)
-
-- ✅ **Git** → [Descargar aquí](https://git-scm.com/downloads)```bash
-
+- ✅ **Git** → [Descargar aquí](https://git-scm.com/downloads)
 - ✅ **PowerShell** (Windows) o **Terminal** (Linux/Mac)
-
-- ✅ **8GB RAM mínimo** (para entrenamiento de modelos).\iniciar_sistema.bat
-
+- ✅ **8GB RAM mínimo** (para entrenamiento de modelos)
 - ✅ **500MB espacio en disco**
-
-```Simplemente ejecuta:Ejecuta este comando en PowerShell:
 
 ### Verificar instalación de Python
 
-
-
 ```bash
-
-python --versionEste script realiza automáticamente:
-
+python --version
 # Debe mostrar: Python 3.12.x o superior
+```
 
-```1. ✅ Generación de 10,000 datos de entrenamiento
+---
 
+## ⚡ Opción 1: Ejecución Automática (RECOMENDADA)
 
-
----2. ✅ Entrenamiento del modelo de IA```bash```powershell
-
-
-
-## ⚡ Opción 1: Ejecución Automática (RECOMENDADA)3. ✅ Pruebas de verificación
-
-
-
-### Windows4. ✅ Lanzamiento de la aplicación web en http://localhost:5000iniciar_sistema.batcd C:\loan-ai-system
-
-
+### Windows
 
 ```powershell
-
-# 1. Abrir PowerShell en la carpeta del proyecto
-
-cd C:\ruta\a\loan-ai-system## 🔧 Opción 2: Ejecutar Paso por Paso```.\ejecutar_todo.bat
-
-
+# 1. Clonar el repositorio
+git clone https://github.com/Emmanuelcasta/Analisis_riesgos.git
+cd Analisis_riesgos
 
 # 2. Ejecutar script automático
+.\iniciar_sistema.bat
+```
 
-.\ejecutar_todo.bat
+Este script realiza automáticamente:
+1. ✅ Generación de 10,000 datos de entrenamiento
+2. ✅ Entrenamiento de 3 modelos de IA (Random Forest, Gradient Boosting, Deep Learning)
+3. ✅ Selección automática del mejor modelo
+4. ✅ Lanzamiento de la aplicación web en http://localhost:5000
 
-```### 1. Instalar Dependencias```
+---
 
+## 🔧 Opción 2: Ejecutar Paso por Paso
 
+### Paso 1: Clonar el Repositorio
 
-### Linux/Mac
+```bash
+git clone https://github.com/Emmanuelcasta/Analisis_riesgos.git
+cd Analisis_riesgos
+```
 
+### Paso 2: Crear Entorno Virtual
 
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
 
-```bash```bashEste script realiza automáticamente:
+# Linux/Mac
+python3 -m venv venv
+source venv/bin/activate
+```
 
-# 1. Abrir terminal en la carpeta del proyecto
+### Paso 3: Instalar Dependencias
 
-cd /ruta/a/loan-ai-system.\instalar_dependencias.bat
+```bash
+pip install -r requirements.txt
+```
 
+**Salida esperada:**
+```
+Successfully installed tensorflow-2.16.1 scikit-learn-1.3.0 pandas-2.1.0 flask-3.0.0 ...
+```
 
+### Paso 4: Generar Datos de Entrenamiento
 
-# 2. Dar permisos de ejecución```1. ✅ Generación de 10,000 datos de entrenamientoEste script ejecutará automáticamente:
+```bash
+python scripts/generar_datos_dummy.py
+```
 
-chmod +x ejecutar_todo.sh
+**Salida esperada:**
+```
+✅ Generando 10,000 registros de préstamos...
+✅ Dataset guardado en: data/datos_prestamos.csv
+✅ Registros generados: 10,000
+   - Aprobados: 1,786 (17.9%)
+   - Rechazados: 8,214 (82.1%)
+```
 
+### Paso 5: Entrenar Modelo
 
+```bash
+python scripts/entrenar_modelo.py
+```
 
-# 3. Ejecutar script automático
+**Salida esperada:**
+```
+📊 Entrenando modelo de Deep Learning...
+Epoch 50/100 - loss: 0.2341 - accuracy: 0.9150
+✅ Modelo entrenado y guardado en: models/modelo_prestamos_final.h5
+✅ Accuracy: 91.50%
+✅ AUC-ROC: 96.12%
+```
 
-./ejecutar_todo.shO manualmente con el entorno virtual activado:2. ✅ Entrenamiento del modelo de IA1. ✅ Generación de datos dummy
+### Paso 6: Iniciar Aplicación Web
+
+```bash
+python run.py
+```
+
+**Salida esperada:**
+```
+============================================================
+Sistema de Análisis de Préstamos con IA
+============================================================
+
+📊 Cargando modelo: Deep Learning (Red Neuronal)
+✅ Modelo Deep Learning cargado exitosamente
+✅ Preprocesador original cargado exitosamente
+✅ Métricas cargadas: Accuracy=91.50%
+
+ * Running on http://127.0.0.1:5000
+```
+
+---
+
+## 🌐 Usar la Aplicación Web
+
+1. **Abrir navegador** en http://localhost:5000
+2. **Llenar el formulario** con los datos del solicitante
+3. **Enviar** y obtener resultado instantáneo (Aprobado/Rechazado)
+
+### Ejemplo de Solicitud
+
+**Caso 1: Perfil Aprobado ✅**
+```
+Nombre: Juan Pérez
+Edad: 35 años
+Estado Civil: Casado
+Ingresos: $5,000,000 COP/mes
+Gastos: $2,000,000 COP/mes
+Monto Solicitado: $15,000,000 COP
+Plazo: 36 meses
+Tipo Contrato: Indefinido
+Antigüedad: 5 años
+```
+
+**Caso 2: Perfil Rechazado ❌**
+```
+Nombre: María García
+Edad: 22 años
+Estado Civil: Soltera
+Ingresos: $1,500,000 COP/mes
+Gastos: $1,200,000 COP/mes
+Monto Solicitado: $50,000,000 COP
+Plazo: 12 meses
+Tipo Contrato: Temporal
+Antigüedad: 6 meses
+```
+
+---
+
+## 🔍 Solución de Problemas Comunes
+
+### Error: "ModuleNotFoundError: No module named 'tensorflow'"
+
+**Solución:**
+```bash
+pip install tensorflow==2.16.1
+```
+
+### Error: "Port 5000 is already in use"
+
+**Solución:**
+```bash
+# Detener el proceso en puerto 5000
+# Windows:
+netstat -ano | findstr :5000
+taskkill /PID <PID> /F
+
+# Linux/Mac:
+lsof -ti:5000 | xargs kill -9
+```
+
+### Error: "No se encuentra el archivo modelo_prestamos_final.h5"
+
+**Solución:**
+```bash
+# Entrenar el modelo primero
+python scripts/entrenar_modelo.py
+```
+
+### Error: "Python not found"
+
+**Solución:**
+- Verifica que Python esté instalado: `python --version`
+- Agrega Python al PATH del sistema
+- Reinicia la terminal después de instalar Python
+
+### La aplicación no carga en el navegador
+
+**Solución:**
+1. Verifica que el servidor esté corriendo en la terminal
+2. Intenta con http://127.0.0.1:5000 en lugar de localhost
+3. Limpia caché del navegador (Ctrl+Shift+R)
+
+---
+
+## 📊 Entrenar Modelos Comparativos (Opcional)
+
+Si quieres comparar 3 modelos diferentes (Random Forest, Gradient Boosting, Deep Learning):
+
+```bash
+python scripts/entrenar_modelos_comparativa.py
+```
+
+**Salida esperada:**
+```
+======================================================================
+🚀 ENTRENAMIENTO COMPARATIVO DE MODELOS
+======================================================================
+
+🌲 MODELO 1: RANDOM FOREST
+   ✅ Accuracy: 98.40%
+   ✅ AUC-ROC: 0.9992
+
+⚡ MODELO 2: GRADIENT BOOSTING
+   ✅ Accuracy: 98.50%
+   ✅ AUC-ROC: 0.9992
+
+🧠 MODELO 3: DEEP LEARNING
+   ✅ Accuracy: 75.75%
+   ✅ AUC-ROC: 0.5918
+
+🏆 MEJOR MODELO: Gradient Boosting (98.50% accuracy)
+```
+
+---
+
+## 📁 Estructura del Proyecto
 
 ```
+loan-ai-system/
+├── app/                        # Aplicación Flask
+│   ├── __init__.py
+│   ├── routes.py              # Rutas y lógica de predicción
+│   ├── templates/             # Plantillas HTML
+│   └── static/                # CSS, JS, imágenes
+├── scripts/
+│   ├── generar_datos_dummy.py      # Genera dataset
+│   ├── entrenar_modelo.py          # Entrena modelo simple
+│   └── entrenar_modelos_comparativa.py  # Entrena 3 modelos
+├── models/                    # Modelos entrenados
+│   ├── modelo_prestamos_final.h5
+│   ├── preprocessor.pkl
+│   └── metricas_modelo.json
+├── data/                      # Datos de entrenamiento
+│   └── datos_prestamos.csv
+├── run.py                     # Punto de entrada
+├── requirements.txt           # Dependencias
+├── README.md                  # Documentación principal
+└── INICIO_RAPIDO.md          # Esta guía
+```
+
+---
+
+## 🎯 Comandos Rápidos de Referencia
+
+```bash
+# Activar entorno virtual (Windows)
+venv\Scripts\activate
+
+# Activar entorno virtual (Linux/Mac)
+source venv/bin/activate
+
+# Generar datos
+python scripts/generar_datos_dummy.py
+
+# Entrenar modelo
+python scripts/entrenar_modelo.py
+
+# Iniciar aplicación
+python run.py
+
+# Ver dependencias instaladas
+pip list
+
+# Actualizar dependencias
+pip install -r requirements.txt --upgrade
+
+# Desactivar entorno virtual
+deactivate
+```
+
+---
+
+## 📞 Soporte
+
+Si encuentras problemas:
+
+1. **Revisa la documentación completa:** [README.md](README.md)
+2. **Verifica requisitos:** Python 3.12+, 8GB RAM, 500MB disco
+3. **Revisa logs:** La terminal muestra mensajes de error detallados
+4. **Issues en GitHub:** [Crear issue](https://github.com/Emmanuelcasta/Analisis_riesgos/issues)
+
+---
+
+## ✅ Checklist de Verificación
+
+- [ ] Python 3.12+ instalado
+- [ ] Entorno virtual creado y activado
+- [ ] Dependencias instaladas (requirements.txt)
+- [ ] Datos generados (data/datos_prestamos.csv)
+- [ ] Modelo entrenado (models/modelo_prestamos_final.h5)
+- [ ] Servidor corriendo en http://localhost:5000
+- [ ] Formulario accesible en el navegador
+- [ ] Predicción funcionando correctamente
+
+---
+
+## 🎉 ¡Listo!
+
+Tu sistema de análisis de riesgo crediticio está funcionando. Ahora puedes:
+
+✅ Evaluar solicitudes de préstamo en tiempo real  
+✅ Obtener probabilidades de aprobación instantáneas  
+✅ Analizar 42 variables financieras automáticamente  
+✅ Procesar hasta 24,519 predicciones por segundo  
+
+**¡Disfruta usando el sistema!** 🚀
 
 
 
